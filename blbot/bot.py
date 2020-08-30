@@ -2,6 +2,7 @@ import logging
 import os
 import random
 import string
+import sys
 
 import discord
 from discord.ext import commands
@@ -69,9 +70,13 @@ async def on_command_error(ctx, error):
         commands.ArgumentParsingError: "Wrong arguments passed! Use `help` to see usage of all available commands.",
     }
 
-    for exception, message in EXCEPTION_MESSAGES.items():
-        if isinstance(error, exception):
-            await ctx.send(message)
+    exception = type(error)
+    if exception in EXCEPTION_MESSAGES:
+        await ctx.send(EXCEPTION_MESSAGES[exception])
+        return
+
+    print(error, file=sys.stderr)
+    await ctx.send(":exclamation: System error occurred! Please, report it to developer.")
 
 
 @bot.check
