@@ -15,7 +15,6 @@ jobs:
       id: get-branch
     - uses: docker/build-push-action@v1
       with:
-        dockerfile: Dockerfile.ci
         registry: ${{ secrets.DOCKER_REGISTRY }}
         repository: ${{ secrets.DOCKER_REPOSITORY }}
         tags: latest,${{ steps.get-branch.outputs.branch }}
