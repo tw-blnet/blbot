@@ -1,0 +1,23 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+
+jobs:
+  build-image:
+    runs-on: [ubuntu-18.04]
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ypicard/get-branch-name-github-action@v1
+      id: get-branch
+    - uses: docker/build-push-action@v1
+      with:
+        dockerfile: Dockerfile.ci
+        registry: ${{ secrets.DOCKER_REGISTRY }}
+        repository: ${{ secrets.DOCKER_REPOSITORY }}
+        tags: latest,${{ steps.get-branch.outputs.branch }}
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
